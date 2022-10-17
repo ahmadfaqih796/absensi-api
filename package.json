@@ -4,11 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Kelompok 4",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
-  }
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.1",
+    "pdfkit": "^0.13.0",
+    "socket.io": "^4.5.2"
+  },
+  "author": "Kelompok 4",
+  "license": "MIT"
 }

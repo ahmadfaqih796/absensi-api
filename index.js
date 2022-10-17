@@ -1,10 +1,15 @@
-// <<<<<<< Updated upstream
-var express = require("express");
-// =======
-//ini sam
-// >>>>>>> Stashed changes
-let tesstash = "tes"
-let hai = "hai"
-let coba = "cona"
-let hello = "hello"
-let tes2 = "tesstashlagi"
+const {config} = require("dotenv")
+let express = require("express")
+const bodyParser = require("body-parser")
+var cors = require("cors")
+const app = express()
+let main = require("./cores/main")
+
+config();
+app.use(cors());
+app.use(bodyParser.json());
+main(app);
+
+app.listen(process.env.PROJECT_PORT, () => {
+  console.log(`⚡️[JUCO]: Server is running at https://localhost:${process.env.PROJECT_PORT}`)
+});
