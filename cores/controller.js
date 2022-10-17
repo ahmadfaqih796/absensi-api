@@ -2,6 +2,7 @@ const express = require("express")
 const AdminController = express.Router()
 const AdminModel = require("./model")
 const { makePassword, makeToken, authenticated } = require("./authentication")
+const { exists } = require("./model")
 
 //untuk Registrasi
 AdminController.post("/register", async (req, res) => {
@@ -21,8 +22,8 @@ AdminController.post("/register", async (req, res) => {
 //Untuk menampilkan daftar admin
 //TODO: masih nampilin data password dan salt
 AdminController.get("/", async (req, res) => {
-  let data = await AdminModel.find()
-  res.json(data)
+  let data = await AdminModel.find({}, { username: 1, name: 1 })
+  res.json({ data })
 })
 
 //Untuk Login
