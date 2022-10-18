@@ -54,6 +54,10 @@ const KaryawanModel = MongoDB.model("Karyawan",
     },
     tahunBulanMasuk: {
       type: String,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     }
   }))
 

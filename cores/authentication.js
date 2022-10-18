@@ -25,6 +25,7 @@ exports.authenticated = async (req) => {
       departemen: user.departemen,
       isSPV: user.isSPV,
       isAdmin: user.isAdmin,
+      isActive: user.isActive,
       name: user.name
     }
   }
