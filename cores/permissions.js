@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-const AdminModel = require("./model");
+const KaryawanModel = require("./model");
 
 exports.isAuthenticated = async (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
     let user = await jwt.verify(token, process.env.PROJECT_KEY);
-    req.user = await AdminModel.findOne({
+    req.user = await KaryawanModel.findOne({
       email: user.email,
     });
     next();
