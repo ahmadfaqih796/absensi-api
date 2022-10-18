@@ -21,7 +21,11 @@ exports.authenticated = async (req) => {
   if (password === user.password) {
     return {
       username: user.username,
-      name: user.name,
+      nik: user.nik,
+      departemen: user.departemen,
+      isSPV: user.isSPV,
+      isAdmin: user.isAdmin,
+      name: user.name
     }
   }
   return null
