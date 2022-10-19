@@ -1,5 +1,5 @@
-exports.generateKodeDetail = async (nik, prefix, tanggal) => {
-  let data = `${nik.toUpperCase()}${prefix.toUpperCase()}-${tanggal}`
+exports.generateKodeAbsen = async (nik, prefix, tanggal) => {
+  let data = `${nik}${prefix.toUpperCase()}-${tanggal}`
   return data;
 }
 

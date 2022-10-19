@@ -37,9 +37,7 @@ AdminController.post("/register", async (req, res) => {
     isActive: req.body.isActive,
     ...passwordSalt
   })
-  console.log(newKaryawan)
   await newKaryawan.save()
-  // let { password, salt, ...data } = newKaryawan
   return res.status(201).json({
     username: req.body.username,
     name: req.body.name,
@@ -62,12 +60,14 @@ AdminController.get("/", async (req, res) => {
   res.json({ data })
 })
 
+//untuk fitur cari data karyawan spesifik admin
 AdminController.get("/search/:nik", async (req, res) => {
   let nik = handleNIK(req, res)
   let data = await KaryawanModel.findOne({ nik })
   return res.json({ data })
 })
 
+//untuk fitur update data karyawan untuk admin
 AdminController.put("/search/:nik", async (req, res) => {
   let nik = handleNIK(req, res)
   const passwordSalt = await makePassword(req.body.password)
@@ -83,14 +83,16 @@ AdminController.put("/search/:nik", async (req, res) => {
     nik: nik,
     isActive: req.body.isActive,
     ...passwordSalt
-  }),)
-  let data = await KaryawanModel.findOne({ nik })
+  }))
+  let data = await KaryawanModel.findOne({ nik }, { password: 0, salt: 0 })
   return res.status(200).json({ data })
 })
 
+//Untuk fitur hapus entry data karyawan buat admin
 AdminController.delete("/search/:nik", async (req, res) => {
   let nik = handleNIK(req, res)
   let data = await KaryawanModel.findOneAndRemove({ nik })
   return res.json({ data })
 })
+
 module.exports = AdminController

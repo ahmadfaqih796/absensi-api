@@ -9,9 +9,9 @@ exports.generateJam = async () => {
 
 exports.generateTanggal = async () => {
   const date = new Date();
-  // const tahun = String(date.getFullYear())
-  // const bulan = String(date.getMonth()).padStart(2, "0")
-  // const hari = String(date.getDate()).padStart(2, "0")
-  // const time = `${hari}-${bulan}-${tahun}`
-  return date
+  const tahun = String(date.getFullYear())
+  const bulan = String(date.getMonth()+1).padStart(2, "0")
+  const hari = String(date.getDate()).padStart(2, "0")
+  const time = `${tahun}-${bulan}-${hari}`
+  return time
 }

@@ -2,26 +2,26 @@ const MongoDB = require("../../cores/database")
 
 const AbsensiModel = MongoDB.model("Absensi",
   MongoDB.Schema({
-    kodeabsen: {
+    kodeAbsen: {
       type: String,
+      required: true,
     },
-    // barcode: {
-    //   type: String,
-    // },
     nik: {
       type: String,
+      required: true,
     },
-    tanggal:{
+    date:{
       type: String,
       required: true,
     },
-    jammasuk: {
+    jamMasuk: {
       type: String,
       required: true,
     },
-    jampulang: {
-      type: String,
-      required: true,
+    jamPulang: {
+      type: String
     }
   })
 )
+
+module.exports = AbsensiModel

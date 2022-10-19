@@ -17,3 +17,7 @@ exports.isAuthorized = async (req, res, next) => {
   }
 }
 
+//Agar hanya Admin yang bisa akses
+exports.isAdmin = async (req, res, next) => {
+  
+}
