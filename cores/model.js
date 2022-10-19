@@ -1,6 +1,6 @@
 const MongoDB = require("./database")
 
-const KaryawanModel = MongoDB.model("Karyawan",
+const UserModel = MongoDB.model("User",
   MongoDB.Schema({
     username: {
       type: String,
@@ -61,4 +61,4 @@ const KaryawanModel = MongoDB.model("Karyawan",
     }
   }))
 
-  module.exports = KaryawanModel;
+  module.exports = UserModel;

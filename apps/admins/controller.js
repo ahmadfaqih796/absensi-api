@@ -20,7 +20,6 @@ AdminController.post("/register", async (req, res) => {
   const date = new Date()
   let tahun = String(date.getFullYear())
   let bulan = String(date.getMonth() + 1).padStart(2, "0")
-  console.log("bulan", bulan)
   let tahunbulan = tahun + bulan
   let nik = await generateNIK(tahunbulan, KaryawanModel)
   const newKaryawan = new KaryawanModel({
@@ -35,13 +34,25 @@ AdminController.post("/register", async (req, res) => {
     tanggalMasuk: date,
     tahunBulanMasuk: tahunbulan,
     nik: nik,
+    isActive: req.body.isActive,
     ...passwordSalt
   })
   console.log(newKaryawan)
   await newKaryawan.save()
+  // let { password, salt, ...data } = newKaryawan
   return res.status(201).json({
     username: req.body.username,
-    name: req.body.name
+    name: req.body.name,
+    gender: req.body.gender,
+    departemen: req.body.departemen,
+    isSPV: req.body.isSPV,
+    isAdmin: req.body.isAdmin,
+    phone: req.body.phone,
+    alamat: req.body.alamat,
+    tanggalMasuk: date,
+    tahunBulanMasuk: tahunbulan,
+    nik: nik,
+    isActive: req.body.isActive,
   })
 })
 
