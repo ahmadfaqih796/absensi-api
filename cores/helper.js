@@ -22,10 +22,10 @@ exports.generateNIK = async (tahunBulan, schema) => {
     let max = await schema.find({}).sort({ "nik": -1 }).limit(1)
     let maxNik = max[0].nik
     nik = String(parseInt(maxNik) + 1)
-    console.log(max)
-    console.log("nik:", max[0].nik)
-    console.log("name:", max.name)
-    console.log("username:", max.username)
+    // console.log(max)
+    // console.log("nik:", max[0].nik)
+    // console.log("name:", max.name)
+    // console.log("username:", max.username)
   }
   return nik;
 }
@@ -92,18 +92,23 @@ exports.validasiJam = async (time) => {
   return jadwalMasuk
 }
 
-exports.cekFormatJam = async (time, next) => {
+exports.cekFormatJam = async (time) => {
   let jam = parseInt(time && time.split(":")[0])
   let menit = parseInt(time && time.split(":")[1])
   let sekon = parseInt(time && time.split(":")[2])
-  if (jam >= 24 && jam < 0) {
+
+  if (jam >= 24 || jam < 0) {
     return null
   }
-  if (menit >= 60 && menit < 0) {
+  if (menit >= 60 || menit < 0) {
     return null
   }
-  if (sekon >= 60 && sekon < 0) {
+  if (sekon >= 60 || sekon < 0) {
     return null
   }
-  next();
+  let jamString = String(jam).padStart(2, "0")
+  let menitString = String(menit).padStart(2, "0")
+  let sekonString = String(sekon).padStart(2, "0")
+  let jadwalMasuk = `${jamString}:${menitString}:${sekonString}`
+  return jadwalMasuk
 }
