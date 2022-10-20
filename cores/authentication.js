@@ -22,11 +22,13 @@ exports.authenticated = async (req) => {
     return {
       username: user.username,
       nik: user.nik,
+      name: user.name,
       departemen: user.departemen,
       isSPV: user.isSPV,
       isAdmin: user.isAdmin,
       isActive: user.isActive,
-      name: user.name
+      jamMasuk: user.jamMasuk,
+      jamKeluar: user.jamKeluar,
     }
   }
   return null
@@ -35,7 +37,7 @@ exports.authenticated = async (req) => {
 //untuk Membuat Token Login
 exports.makeToken = async (user) => {
   let hour = 4;
-  let time = hour*3600;
-  let token = jwt.sign(user, process.env.PROJECT_KEY, {expiresIn: `${time}s`})
+  let time = hour * 3600;
+  let token = jwt.sign(user, process.env.PROJECT_KEY, { expiresIn: `${time}s` })
   return token;
 }

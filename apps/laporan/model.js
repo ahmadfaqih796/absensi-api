@@ -37,4 +37,4 @@ const LaporanModel = MongoDB.model("Laporan",
     }
   }))
 
-  module.exports = LaporanModel
+module.exports = LaporanModel

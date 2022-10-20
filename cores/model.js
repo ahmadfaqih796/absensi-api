@@ -22,7 +22,6 @@ const UserModel = MongoDB.model("User",
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     gender: {
       type: String,
@@ -58,7 +57,15 @@ const UserModel = MongoDB.model("User",
     isActive: {
       type: Boolean,
       default: true,
+    },
+    jamMasuk: {
+      type: String,
+      default: "08:00:00"
+    },
+    jamKeluar: {
+      type: String,
+      default: "17:00:00"
     }
   }))
 
-  module.exports = UserModel;
+module.exports = UserModel;
