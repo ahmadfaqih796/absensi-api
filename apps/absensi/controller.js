@@ -26,10 +26,12 @@ AbsensiController.post("", async (req, res) => {
     if (!dataAbsen) {
       await newAbsen.save()
       if (jam > "08:00:00") {
-        res.json({ message: "Anda terlambat" })
+        return res.json({ message: "Anda terlambat", data })
       } //kalau datang terlambat
-      let data = await AbsensiModel.findOne({ kodeAbsen })
-      return res.json(data)
+      else {
+        let data = await AbsensiModel.findOne({ kodeAbsen })
+        return res.json(data)
+      }
     }
     //kalau sudah ada data absen, cek apakah ada data jam pulang atau belum
     else if (!dataAbsen.jamPulang) {
