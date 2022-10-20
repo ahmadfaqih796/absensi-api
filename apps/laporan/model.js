@@ -10,6 +10,10 @@ const LaporanModel = MongoDB.model("Laporan",
       type: String,
       required: true,
     },
+    departemen: {
+      type: String,
+      required: true,
+    },
     tanggal: {
       type: String,
       required: true,
