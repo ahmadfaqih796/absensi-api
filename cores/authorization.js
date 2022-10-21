@@ -45,3 +45,17 @@ exports.isAdmin = async (req, res, next) => {
   }
 }
 
+//Agar hanya SPV yang bisa akses
+exports.isSPV = async (req, res, next) => {
+  try {
+    if (req.user.isSPV) {
+      next();
+    }
+    else {
+      throw ({ message: "User Dilarang Mengakses URL Ini" })
+    }
+  }
+  catch (error) {
+    return res.status(401).json(error)
+  }
+}
