@@ -66,7 +66,15 @@ AdminController.post("/register", [isAuthorized, isAdmin, isActive], async (req,
 
 //Untuk menampilkan daftar seluruh user
 AdminController.get("/", [isAuthorized, isAdmin, isActive], async (req, res) => {
-  let data = await KaryawanModel.find({}, { password: 0, salt: 0 })
+  let page = parseInt(req.query.page)
+  let limit = req.query.limit
+  if (!limit) {
+    limit = 10
+  }
+  let startIndex = (page - 1) * limit
+  let endIndex = page * limit
+  let result = await KaryawanModel.find({}, { password: 0, salt: 0 })
+  let data = result.slice(startIndex, endIndex)
   res.json({ data })
 })
 

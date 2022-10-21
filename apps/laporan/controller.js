@@ -50,37 +50,56 @@ LaporanController.post("/", [isAuthorized, isActive], async (req, res) => {
     let statusJamAkhir = await cekFormatJam(req.body.jamAkhir)
     if (statusJamMulai && statusJamAkhir) {
       await newLaporan.save()
+      let data = await LaporanModel.findOne({ kodeLaporan: kodeLaporan })
     }
     else {
       return res.status(400).json({ message: "Format Jam Tidak Sesuai <hh:mm:ss>" })
     }
   }
-  return res.json({ message: "berhasil" })
+  return res.json({ message: "Laporan sudah berhasil diunggah", data })
 })
 
 //untuk melihat data laporan, data user didapat dari token, hanya bisa diakses oleh SPV
 //Menggunakan input body berupa tanggal
 LaporanController.get("/", [isAuthorized, isSPV, isActive], async (req, res) => {
+  let page = parseInt(req.query.page)
+  let limit = req.query.limit
+  if (!limit) {
+    limit = 10
+  }
+  let startIndex = (page - 1) * limit
+  let endIndex = page * limit
   let user = await getUser(req)
   let tanggal = req.body.tanggal
-  let data = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen })
+  let result = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen })
+  let data = result.slice(startIndex, endIndex)
+  // .lean().limit(limit ? limit : 5)
   return res.json({ data })
 })
 
 //untuk melihat data laporan khusus dari satu user, 
 //untuk melihat punya sendiri atau melihat orang dari departemen yang sama (untuk SPV)
 LaporanController.get("/user/:nik", [isAuthorized, isSPV, isActive], async (req, res) => {
+  let page = parseInt(req.query.page)
+  let limit = req.query.limit
+  if (!limit) {
+    limit = 10
+  }
+  let startIndex = (page - 1) * limit
+  let endIndex = page * limit
   let nik = handleNIK(req, res)
   let user = await getUser(req)
   let target = await UserModel.findOne({ nik: nik })
   let tanggal = req.body.tanggal
   if (user.nik === target.nik) {
-    let data = await LaporanModel.find({ nik: user.nik, tanggal: tanggal })
+    let result = await LaporanModel.find({ nik: user.nik, tanggal: tanggal })
+    let data = result.slice(startIndex, endIndex)
     return res.json({ data })
   }
   if (user.isSPV) {
     if (user.departemen === target.departemen) {
-      let data = await LaporanModel.find({ nik: nik, tanggal: tanggal })
+      let result = await LaporanModel.find({ nik: nik, tanggal: tanggal })
+      let data = result.slice(startIndex, endIndex)
       return res.json({ data })
     }
     else {
