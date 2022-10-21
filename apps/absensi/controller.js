@@ -86,7 +86,7 @@ AbsensiController.post("/pulang", async (req, res) => {
 
 
 //Untuk Melihat Daftar Absen Hari Ini, Hanya Bisa Diakses Oleh Admin Saja
-AbsensiController.get("/get", [isAuthorized, isAdmin, isActive], async (req, res) => {
+AbsensiController.get("", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let tanggal = req.body.tanggal;
   let data = await AbsensiModel.find({ date: tanggal })
   return res.json({ data })
