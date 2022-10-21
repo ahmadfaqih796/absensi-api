@@ -1,15 +1,13 @@
 const config = require("dotenv")
 const jwt = require("jsonwebtoken")
 const UserModel = require("./model")
-
-// config();
+const { getUser } = require("./helper")
+const e = require("express")
 
 //Checking the Token's Authentication
 exports.isAuthorized = async (req, res, next) => {
   try {
-    const authHeader = req.headers["authorization"]
-    const token = authHeader && authHeader.split(" ")[1]
-    let user = await jwt.verify(token, process.env.PROJECT_KEY)
+    let user = await getUser(req)
     req.user = await UserModel.findOne({ username: user.username })
     next();
   } catch (error) {
@@ -17,7 +15,33 @@ exports.isAuthorized = async (req, res, next) => {
   }
 }
 
+//Agar hanya bisa diakses oleh User yang masih aktif
+exports.isActive = async (req, res, next) => {
+  try {
+    if (req.user.isActive) {
+      next();
+    }
+    else {
+      throw ({ message: "Akun Anda Sudah Tidak Aktif" })
+    }
+  }
+  catch (error) {
+    return res.status(401).json(error)
+  }
+}
+
 //Agar hanya Admin yang bisa akses
 exports.isAdmin = async (req, res, next) => {
-
+  try {
+    if (req.user.isAdmin) {
+      next();
+    }
+    else {
+      throw ({ message: "User Dilarang Mengakses URL Ini" })
+    }
+  }
+  catch (error) {
+    return res.status(401).json(error)
+  }
 }
+

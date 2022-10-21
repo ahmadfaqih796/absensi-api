@@ -22,10 +22,6 @@ exports.generateNIK = async (tahunBulan, schema) => {
     let max = await schema.find({}).sort({ "nik": -1 }).limit(1)
     let maxNik = max[0].nik
     nik = String(parseInt(maxNik) + 1)
-    // console.log(max)
-    // console.log("nik:", max[0].nik)
-    // console.log("name:", max.name)
-    // console.log("username:", max.username)
   }
   return nik;
 }

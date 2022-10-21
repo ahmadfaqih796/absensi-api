@@ -4,6 +4,7 @@ const KaryawanModel = require("../../cores/model")
 const { makePassword } = require("../../cores/authentication")
 const { generateNIK, cekFormatJam } = require("../../cores/helper")
 const { exists } = require("../../cores/model")
+const { isAuthorized, isAdmin, isActive } = require("../../cores/authorization")
 
 const handleNIK = (req, res) => {
   let nik = req.params.nik;
@@ -15,7 +16,7 @@ const handleNIK = (req, res) => {
 }
 
 //untuk Registrasi semua User (Staff, SPV, Admin)
-AdminController.post("/register", async (req, res) => {
+AdminController.post("/register", [isAuthorized, isAdmin, isActive], async (req, res) => {
   const passwordSalt = await makePassword(req.body.password)
   const date = new Date()
   let tahun = String(date.getFullYear())
@@ -64,20 +65,20 @@ AdminController.post("/register", async (req, res) => {
 
 
 //Untuk menampilkan daftar seluruh user
-AdminController.get("/", async (req, res) => {
+AdminController.get("/", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let data = await KaryawanModel.find({}, { password: 0, salt: 0 })
   res.json({ data })
 })
 
 //untuk fitur cari data karyawan spesifik admin
-AdminController.get("/search/:nik", async (req, res) => {
+AdminController.get("/search/:nik", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let nik = handleNIK(req, res)
   let data = await KaryawanModel.findOne({ nik }, { password: 0, salt: 0 })
   return res.json({ data })
 })
 
 //untuk fitur update data karyawan untuk admin
-AdminController.put("/search/:nik", async (req, res) => {
+AdminController.put("/search/:nik", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let statusJamMasuk, statusJamKeluar
   let nik = handleNIK(req, res)
   const passwordSalt = await makePassword(req.body.password)
@@ -118,7 +119,7 @@ AdminController.put("/search/:nik", async (req, res) => {
 })
 
 //Untuk fitur hapus entry data karyawan buat admin
-AdminController.delete("/search/:nik", async (req, res) => {
+AdminController.delete("/search/:nik", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let nik = handleNIK(req, res)
   let data = await KaryawanModel.findOneAndRemove({ nik }, { password: 0, salt: 0 })
   return res.json({ data })
