@@ -3,6 +3,7 @@ const AbsensiController = express.Router()
 const UserModel = require("../../cores/model")
 const AbsensiModel = require("./model")
 const { generateKode, cekJadwalMasuk, generateJam, generateTanggal } = require("../../cores/helper")
+const { isAuthorized, isAdmin, isActive } = require("../../cores/authorization")
 
 //untuk absen jam masuk
 AbsensiController.post("/masuk", async (req, res) => {
@@ -81,6 +82,14 @@ AbsensiController.post("/pulang", async (req, res) => {
       }
     }
   }
+})
+
+
+//Untuk Melihat Daftar Absen Hari Ini, Hanya Bisa Diakses Oleh Admin Saja
+AbsensiController.get("/get", [isAuthorized, isAdmin, isActive], async (req, res) => {
+  let tanggal = req.body.tanggal;
+  let data = await AbsensiModel.find({ date: tanggal })
+  return res.json({ data })
 })
 
 module.exports = AbsensiController
