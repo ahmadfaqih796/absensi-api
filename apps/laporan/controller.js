@@ -70,7 +70,7 @@ LaporanController.get("/", [isAuthorized, isSPV, isActive], async (req, res) => 
   let startIndex = (page - 1) * limit
   let endIndex = page * limit
   let user = await getUser(req)
-  let tanggal = req.body.tanggal
+  let tanggal = req.query.tanggal
   let result = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen })
   let data = result.slice(startIndex, endIndex)
   // .lean().limit(limit ? limit : 5)
@@ -90,7 +90,7 @@ LaporanController.get("/user/:nik", [isAuthorized, isSPV, isActive], async (req,
   let nik = handleNIK(req, res)
   let user = await getUser(req)
   let target = await UserModel.findOne({ nik: nik })
-  let tanggal = req.body.tanggal
+  let tanggal = req.query.tanggal
   if (user.nik === target.nik) {
     let result = await LaporanModel.find({ nik: user.nik, tanggal: tanggal })
     let data = result.slice(startIndex, endIndex)
