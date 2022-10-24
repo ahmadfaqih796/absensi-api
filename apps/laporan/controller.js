@@ -38,6 +38,7 @@ LaporanController.post("/", [isAuthorized, isActive], async (req, res) => {
     const newLaporan = new LaporanModel({
       kodeLaporan: kodeLaporan,
       nik: user.nik,
+      name: user.name,
       departemen: user.departemen,
       tanggal: tanggal,
       tugas: req.body.tugas,
