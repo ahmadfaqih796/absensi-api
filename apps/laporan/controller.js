@@ -57,7 +57,7 @@ LaporanController.post("/", [isAuthorized, isActive], async (req, res) => {
       return res.status(400).json({ message: "Format Jam Tidak Sesuai <hh:mm:ss>" })
     }
   }
-  return res.json({ message: "Laporan sudah berhasil diunggah", data })
+  return res.json({ message: "Laporan sudah berhasil diunggah" })
 })
 
 //untuk melihat data laporan, data user didapat dari token, hanya bisa diakses oleh SPV

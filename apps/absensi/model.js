@@ -1,6 +1,7 @@
-const MongoDB = require("../../cores/database")
+const MongoDB = require("../../cores/database");
 
-const AbsensiModel = MongoDB.model("Absensi",
+const AbsensiModel = MongoDB.model(
+  "Absensi",
   MongoDB.Schema({
     kodeAbsen: {
       type: String,
@@ -10,18 +11,30 @@ const AbsensiModel = MongoDB.model("Absensi",
       type: String,
       required: true,
     },
-    date:{
+    name: {
+      type: String,
+      require: true,
+    },
+    date: {
       type: String,
       required: true,
+    },
+    otp: {
+      type: String,
+      require: true,
     },
     jamMasuk: {
       type: String,
       required: true,
     },
     jamPulang: {
-      type: String
-    }
+      type: String,
+    },
+    status: {
+      type: Boolean,
+      default: true,
+    },
   })
-)
+);
 
-module.exports = AbsensiModel
+module.exports = AbsensiModel;
