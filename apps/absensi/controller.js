@@ -23,11 +23,10 @@ AbsensiController.post("/masuk", async (req, res) => {
     return res.status(400).json({ message: "Data Karyawan Tidak Tersedia" });
   } //kalau ada data karyawan, periksa data absen
   else {
-    let link = "http://localhost:3001/absen/masuk/20221006";
     let notif = client.messages
       .create({
         from: `whatsapp:+14155238886`,
-        body: `terima kasih anda sudah absen masuk\nhallo,${dataKaryawan.name}`,
+        body: `terima kasih anda sudah absen masuk\n,${dataKaryawan.name}`,
         to: `whatsapp:+6282182771538`,
       })
       .then((message) => console.log(message));

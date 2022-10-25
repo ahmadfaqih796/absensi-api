@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken")
 exports.generateKode = async (nik, prefix, tanggal, counter) => {
   let data;
   if (prefix === "ABSEN") {
-    data = `${nik}.${prefix.toUpperCase()}.${tanggal}`
+    data = `${nik}-${prefix.toUpperCase()}-${tanggal}`
   }
   if (prefix === "LAPOR") {
-    data = `${nik}.${prefix.toUpperCase()}.${tanggal}.${counter}`
+    data = `${nik}-${prefix.toUpperCase()}-${tanggal}-${counter}`
   }
   return data;
 }

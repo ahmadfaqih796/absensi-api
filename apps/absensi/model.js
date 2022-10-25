@@ -13,7 +13,7 @@ const AbsensiModel = MongoDB.model(
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     date: {
       type: String,
@@ -21,7 +21,7 @@ const AbsensiModel = MongoDB.model(
     },
     otp: {
       type: String,
-      require: true,
+      required: true,
     },
     jamMasuk: {
       type: String,
