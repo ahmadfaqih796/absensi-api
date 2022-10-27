@@ -64,44 +64,49 @@ LaporanController.post("/", [isAuthorized, isActive], async (req, res) => {
 //Menggunakan input body berupa tanggal
 LaporanController.get("/", [isAuthorized, isSPV, isActive], async (req, res) => {
   let page = parseInt(req.query.page)
-  let limit = req.query.limit
-  if (!limit) {
-    limit = 10
-  }
-  let startIndex = (page - 1) * limit
-  let endIndex = page * limit
+  let limit = (req.query.limit) ? (req.query.limit) : 10
   let user = await getUser(req)
   let tanggal = req.query.tanggal
-  let result = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen })
-  let data = result.slice(startIndex, endIndex)
-  // .lean().limit(limit ? limit : 5)
-  return res.json({ data })
+  let total = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen }).count();
+  let totalPage = Math.ceil(total / limit)
+  let previousPage = (page > 1) ? (page - 1) : null
+  let nextPage = (page < totalPage) ? (page + 1) : null
+  let skip = (page * limit) - limit
+  let data = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen }).lean()
+    .limit(limit).skip(skip)
+  res.json({ page, previousPage, nextPage, totalPage, data })
 })
 
 //untuk melihat data laporan khusus dari satu user, 
 //untuk melihat punya sendiri atau melihat orang dari departemen yang sama (untuk SPV)
 LaporanController.get("/user/:nik", [isAuthorized, isSPV, isActive], async (req, res) => {
   let page = parseInt(req.query.page)
-  let limit = req.query.limit
-  if (!limit) {
-    limit = 10
-  }
-  let startIndex = (page - 1) * limit
-  let endIndex = page * limit
+  let limit = (req.query.limit) ? (req.query.limit) : 10
   let nik = handleNIK(req, res)
   let user = await getUser(req)
   let target = await UserModel.findOne({ nik: nik })
   let tanggal = req.query.tanggal
+
   if (user.nik === target.nik) {
-    let result = await LaporanModel.find({ nik: user.nik, tanggal: tanggal })
-    let data = result.slice(startIndex, endIndex)
-    return res.json({ data })
+    let total = await LaporanModel.find({ nik: user.nik, tanggal: tanggal }).count()
+    let totalPage = Math.ceil(total / limit)
+    let previousPage = (page > 1) ? (page - 1) : null
+    let nextPage = (page < totalPage) ? (page + 1) : null
+    let skip = (page * limit) - limit
+    let data = await LaporanModel.find({ nik: user.nik, tanggal: tanggal }).lean()
+      .limit(limit).skip(skip)
+    return res.json({ page, previousPage, nextPage, totalPage, data })
   }
   if (user.isSPV) {
     if (user.departemen === target.departemen) {
-      let result = await LaporanModel.find({ nik: nik, tanggal: tanggal })
-      let data = result.slice(startIndex, endIndex)
-      return res.json({ data })
+      let total = await LaporanModel.find({ nik: nik, tanggal: tanggal }).count()
+      let totalPage = Math.ceil(total / limit)
+      let previousPage = (page > 1) ? (page - 1) : null
+      let nextPage = (page < totalPage) ? (page + 1) : null
+      let skip = (page * limit) - limit
+      let data = await LaporanModel.find({ nik: nik, tanggal: tanggal }).lean()
+        .limit(limit).skip(skip)
+      return res.json({ page, previousPage, nextPage, totalPage, data })
     }
     else {
       return res.json({ message: "Anda tidak berada dalam satu Departemen yang sama" })

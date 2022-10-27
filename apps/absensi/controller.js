@@ -16,20 +16,20 @@ const {
 
 //untuk absen jam masuk
 AbsensiController.post("/masuk", async (req, res) => {
-  const client = require("twilio")(process.env.SID, process.env.TOKEN);
+  // const client = require("twilio")(process.env.SID, process.env.TOKEN);
   const dataKaryawan = await UserModel.findOne({ nik: req.body.nik });
   // kalau tidak ada data karyawan yang sesuai, kembalikan error
   if (!dataKaryawan) {
     return res.status(400).json({ message: "Data Karyawan Tidak Tersedia" });
   } //kalau ada data karyawan, periksa data absen
   else {
-    let notif = client.messages
-      .create({
-        from: `whatsapp:+14155238886`,
-        body: `terima kasih anda sudah absen masuk\n,${dataKaryawan.name}`,
-        to: `whatsapp:+6282182771538`,
-      })
-      .then((message) => console.log(message));
+    // let notif = client.messages
+    //   .create({
+    //     from: `whatsapp:+14155238886`,
+    //     body: `terima kasih anda sudah absen masuk\n,${dataKaryawan.name}`,
+    //     to: `whatsapp:+6289657055232`,
+    //   })
+    //   .then((message) => console.log(message));
     let tanggal = await generateTanggal();
     let jam = await generateJam();
     let kodeAbsen = await generateKode(dataKaryawan.nik, "ABSEN", tanggal);
@@ -38,7 +38,7 @@ AbsensiController.post("/masuk", async (req, res) => {
       kodeAbsen: kodeAbsen,
       nik: dataKaryawan.nik,
       name: dataKaryawan.name,
-      otp: notif,
+      // otp: notif,
       date: tanggal,
       jamMasuk: jam,
     });
@@ -82,20 +82,20 @@ AbsensiController.put("/masuk/:nik", async (req, res) => {
 
 AbsensiController.post("/pulang", async (req, res) => {
   const dataKaryawan = await UserModel.findOne({ nik: req.body.nik });
-	const client = require("twilio")(process.env.SID, process.env.TOKEN);
+  // const client = require("twilio")(process.env.SID, process.env.TOKEN);
   //kalau tidak ada data karyawan yang sesuai
   if (!dataKaryawan) {
     return res.status(400).json({ message: "Data Karyawan Tidak Tersedia" });
   }
   //kalau data karyawan tersedia, periksa data absen
   else {
-		client.messages
-    .create({
-      from: `whatsapp:+14155238886`,
-      body: `terima kasih anda sudah absen pulang\n,${dataKaryawan.name}`,
-      to: `whatsapp:+6282182771538`,
-    })
-    .then((message) => console.log(message));
+    // client.messages
+    //   .create({
+    //     from: `whatsapp:+14155238886`,
+    //     body: `terima kasih anda sudah absen pulang\n,${dataKaryawan.name}`,
+    //     to: `whatsapp:+6282182771538`,
+    //   })
+    //   .then((message) => console.log(message));
     let tanggal = await generateTanggal();
     let jam = await generateJam();
     let kodeAbsen = await generateKode(dataKaryawan.nik, "ABSEN", tanggal);
@@ -139,18 +139,18 @@ AbsensiController.post("/pulang", async (req, res) => {
 });
 
 //Untuk Melihat Daftar Absen Hari Ini, Hanya Bisa Diakses Oleh Admin Saja
-AbsensiController.get("", async (req, res) => {
-  let page = parseInt(req.query.page);
-  let limit = req.query.limit;
-  if (!limit) {
-    limit = 10;
-  }
-  let startIndex = (page - 1) * limit;
-  let endIndex = page * limit;
+AbsensiController.get("", [isAuthorized, isActive, isAdmin], async (req, res) => {
+  let page = parseInt(req.query.page)
+  let limit = (req.query.limit) ? (req.query.limit) : 10
+  let total = await AbsensiModel.find({ date: tanggal }).count();
+  let totalPage = Math.ceil(total / limit)
+  let previousPage = (page > 1) ? (page - 1) : null
+  let nextPage = (page < totalPage) ? (page + 1) : null
+  let skip = (page * limit) - limit
   let tanggal = req.query.tanggal;
-  let result = await AbsensiModel.find({ date: tanggal });
-  let data = result.slice(startIndex, endIndex);
-  return res.json({ data });
+  let data = await AbsensiModel.find({ date: tanggal }).lean()
+    .limit(limit).skip(skip)
+  res.json({ page, previousPage, nextPage, totalPage, data })
 });
 
 module.exports = AbsensiController;

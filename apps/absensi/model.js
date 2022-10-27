@@ -19,10 +19,10 @@ const AbsensiModel = MongoDB.model(
       type: String,
       required: true,
     },
-    otp: {
-      type: String,
-      required: true,
-    },
+    // otp: {
+    //   type: String,
+    //   required: true,
+    // },
     jamMasuk: {
       type: String,
       required: true,

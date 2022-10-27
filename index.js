@@ -11,5 +11,5 @@ app.use(bodyParser.json());
 main(app);
 
 app.listen(process.env.PROJECT_PORT, () => {
-  console.log(`⚡️[JUCO]: Server is running at https://localhost:${process.env.PROJECT_PORT}`)
+  console.log(`⚡️[Absensi]: Server is running at https://localhost:${process.env.PROJECT_PORT}`)
 });
