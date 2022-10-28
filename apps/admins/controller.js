@@ -70,12 +70,13 @@ AdminController.get("", [isAuthorized, isAdmin, isActive], async (req, res) => {
   let limit = (req.query.limit) ? (req.query.limit) : 10
   let total = await KaryawanModel.find().count();
   let totalPage = Math.ceil(total / limit)
+  let totalAll = await KaryawanModel.find().count()
   let previousPage = (page > 1) ? (page - 1) : null
   let nextPage = (page < totalPage) ? (page + 1) : null
   let skip = (page * limit) - limit
   let data = await KaryawanModel.find({}, { password: 0, salt: 0 }).lean()
     .limit(limit).skip(skip)
-  res.json({ page, previousPage, nextPage, totalPage, data })
+  res.json({ page, previousPage, nextPage, totalPage, data, totalAll })
 })
 
 //untuk fitur cari data karyawan spesifik admin

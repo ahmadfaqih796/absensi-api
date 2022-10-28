@@ -68,13 +68,14 @@ LaporanController.get("/", [isAuthorized, isSPV, isActive], async (req, res) => 
   let user = await getUser(req)
   let tanggal = req.query.tanggal
   let total = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen }).count();
+  let totalAll = await LaporanModel.find({ tanggal: tanggal }).count()
   let totalPage = Math.ceil(total / limit)
   let previousPage = (page > 1) ? (page - 1) : null
   let nextPage = (page < totalPage) ? (page + 1) : null
   let skip = (page * limit) - limit
   let data = await LaporanModel.find({ tanggal: tanggal, departemen: user.departemen }).lean()
     .limit(limit).skip(skip)
-  res.json({ page, previousPage, nextPage, totalPage, data })
+  res.json({ page, previousPage, nextPage, totalPage, data, totalAll })
 })
 
 //untuk melihat data laporan khusus dari satu user, 

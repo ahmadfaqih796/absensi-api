@@ -144,13 +144,14 @@ AbsensiController.get("", [isAuthorized, isActive, isAdmin], async (req, res) =>
   let limit = (req.query.limit) ? (req.query.limit) : 10
   let total = await AbsensiModel.find({ date: tanggal }).count();
   let totalPage = Math.ceil(total / limit)
+  let totalAll = await AbsensiModel.find({ date: tanggal }).count()
   let previousPage = (page > 1) ? (page - 1) : null
   let nextPage = (page < totalPage) ? (page + 1) : null
   let skip = (page * limit) - limit
   let tanggal = req.query.tanggal;
   let data = await AbsensiModel.find({ date: tanggal }).lean()
     .limit(limit).skip(skip)
-  res.json({ page, previousPage, nextPage, totalPage, data })
+  res.json({ page, previousPage, nextPage, totalPage, data, totalAll })
 });
 
 module.exports = AbsensiController;
